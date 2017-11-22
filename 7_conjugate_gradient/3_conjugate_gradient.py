@@ -8,20 +8,12 @@ def conjugate_gradient_method(a: np.matrix, b: np.matrix) -> np.matrix:
     x = np.matrix(np.zeros(b.shape))
     v = get_gradient(a, b, x)
     d = v
-    # for i in range(b.shape[0]):
-    steps = 0
-    while True:
+    for i in range(b.shape[0]):
         if not np.linalg.norm(d.T * a * d):
             break
-        steps += 1
-        new_x = x - d * (d.T * (a * x - b) / (d.T * a * d))
-        v_prev, v = v, get_gradient(a, b, new_x)
-        d = v - d * (v.T * v / (v_prev.T * v_prev))
-        if not np.linalg.norm(x - new_x):
-            x = new_x
-            break
-        x = new_x
-    print(steps)
+        x = x - d * (d.T * (a * x - b) / (d.T * a * d))
+        v = get_gradient(a, b, x)
+        d = v - d * (d.T * a * v / (d.T * a * d))
     return x
 
 
