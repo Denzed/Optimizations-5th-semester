@@ -1,7 +1,7 @@
-from typing import Tuple, Callable, Union
-from random import random
-from math import log
 from decimal import Decimal
+from random import random
+from typing import Callable, Union, Tuple
+
 import numpy as np
 
 
@@ -97,37 +97,7 @@ def gradient_method_backtracking(func: ConvexFunc,
 
     return gradient_method(func, x0, eps, backtracking_line_search)
 
-
 dectype = np.dtype(Decimal)
 EPS: Decimal = Decimal(1e-5)
 INF: Decimal = Decimal(2) # Used in approximate M and argmin counting -- setting it pretty low, because we know answer is somewhere in this bounds
-X0: np.ndarray = np.array([Decimal(1)] * 2, dectype)  # X0 should be also set accurately for the above reason
 RANDOM_POINTS = 10 ** 3
-
-if __name__ == '__main__':
-    first_function = ConvexFunc(
-        lambda a: (a[0] ** 2 + 69 * a[1] ** 2) / 2,
-        2,
-        lambda a: np.array([a[0], 69 * a[1]], dectype),
-        Decimal(69),
-        np.array([Decimal(0), Decimal(0)], dectype),
-        lambda a: (a[0] ** 2 + 4761 * a[1] ** 2) / (a[0] ** 2 + 328509 * a[1] ** 2)
-    )
-
-    print(gradient_method_const(first_function, X0, EPS))
-    print(gradient_method_argmin(first_function, X0, EPS))
-    print(gradient_method_backtracking(first_function, X0, EPS))
-
-    second_function = ConvexFunc(
-        lambda a: ((a[0] + 3 * a[1]).exp() + (a[0] - 3 * a[1]).exp() + (-a[0]).exp()),
-        2,
-        lambda a: np.array([(a[0] + 3 * a[1]).exp() + (a[0] - 3 * a[1]).exp() - (-a[0]).exp(),
-                            3 * ((a[0] + 3 * a[1]).exp() - (a[0] - 3 * a[1]).exp())], dectype),
-        None,  # m will be calculated in constructor
-        np.array([Decimal(-log(2) / 2), Decimal(0)], dectype),
-        None  # argmin_calc will be calculated in constructor
-    )
-
-    print(gradient_method_const(second_function, X0, EPS))
-    print(gradient_method_argmin(second_function, X0, EPS))
-    print(gradient_method_backtracking(second_function, X0, EPS))
