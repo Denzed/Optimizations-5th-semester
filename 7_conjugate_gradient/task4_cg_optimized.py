@@ -189,19 +189,19 @@ EPS = 1e-5
 # B
 def biconjugate_gradient_method(a: Matrix, b: Vector) -> Matrix:
     x = Vector(a.m)
-    s = z = p = r = b - a * x
+    p = r = p_ = r_ = b - a * x
     while True:
-        alpha = (p.T * r) / (s.T * a * z)
-        if norm(z * alpha) < EPS:
+        print(a, p, p_, sep="\n")
+        alpha = (r * r_) / ((p * a) * p_)
+        if norm(p * alpha) < EPS:
             break
-        x = x + z * alpha
-        new_r = r - a * z * alpha
-        new_p = p - a.T * s * alpha
-        beta = (new_p.T * new_r) / (p.T * r)
-        r = new_r
-        p = new_p
-        z = r + z * beta
-        s = p + s * beta
+        x = x + p * alpha
+        new_r = r - a * p * alpha
+        new_r_ = r_ - a.T * p_ * alpha
+        beta = (new_r.T * new_r_) / (r * r_)
+        r, r_ = new_r, new_r_
+        p = r + p * beta
+        p_ = r_ + p_ * beta
     return x
 
 
@@ -215,7 +215,7 @@ def norm(obj):
 
 if __name__ == '__main__':
     a = Matrix(2, 2, [
-        [3, 1],
+        [5, 2],
         [2, 1]
     ])
     b = Vector(2, [16, 1])

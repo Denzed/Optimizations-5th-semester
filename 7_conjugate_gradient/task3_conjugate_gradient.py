@@ -42,7 +42,7 @@ def biconjugate_gradient_method(a: np.matrix, b: np.matrix) -> np.matrix:
 
 if __name__ == '__main__':
     a = np.matrix([
-        [3, 1],
+        [5, 2],
         [2, 1]
     ])
     b = np.matrix([
